@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>linger</title>
+<meta name="description" content="Seven poems that only finish for readers who slow down. By Joe Karlsson.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="bar wrap">
+  <a href="index.html" class="mono">LINGER</a>
+  <nav class="mono"><a href="about.html">ABOUT</a></nav>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <h1 class="display">linger</h1>
+    <p class="mono lede" id="lede">Poems in three readings. Each one only finishes if you slow down.</p>
+  </section>
+
+  <ol class="index" id="index"></ol>
+</main>
+
+<footer class="foot wrap mono">
+  <a href="https://joekarlsson.com">JOE KARLSSON</a>
+  <span>LINGER, 2026</span>
+  <a href="about.html">ABOUT →</a>
+</footer>
+
+<script src="poems.js"></script>
+<script>
+const NAMES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+document.getElementById("lede").textContent =
+  `${NAMES[POEMS.length] || POEMS.length} poems in three readings. Each one only finishes if you slow down.`;
+
+const list = document.getElementById("index");
+POEMS.forEach((poem, i) => {
+  const count = poem.stanzas.flat().length;
+  const li = document.createElement("li");
+  li.innerHTML = `
+    <a class="row wrap" href="poem.html?p=${poem.slug}">
+      <span class="mono">${String(i + 1).padStart(2, "0")}</span>
+      <span class="row-title"></span>
+      <span class="mono row-meta">${count} LINES</span>
+    </a>`;
+  li.querySelector(".row-title").textContent = poem.title;
+  list.append(li);
+});
+</script>
+</body>
+</html>

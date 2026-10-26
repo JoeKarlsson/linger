@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>linger</title>
+<meta name="description" content="A poem that only finishes for readers who slow down. By Joe Karlsson.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="bar wrap">
+  <a href="index.html" class="mono">LINGER</a>
+  <nav class="mono"><a href="about.html">ABOUT</a></nav>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <p class="mono kicker" id="kicker"></p>
+    <h1 class="display title" id="title">linger</h1>
+  </section>
+
+  <div id="poem"></div>
+
+  <noscript>
+    <p class="end mono wrap">THIS POEM NEEDS JAVASCRIPT TO READ AT YOUR PACE.</p>
+  </noscript>
+
+  <p class="end mono wrap">END. IF YOU MISSED ANYTHING, GO BACK UP SLOWLY.</p>
+
+  <a class="next wrap" id="next" href="index.html">
+    <span class="mono" id="next-label">NEXT</span>
+    <span class="next-title" id="next-title"></span>
+  </a>
+</main>
+
+<footer class="foot wrap mono">
+  <a href="https://joekarlsson.com">JOE KARLSSON</a>
+  <span>LINGER, 2026</span>
+  <a href="index.html">ALL POEMS →</a>
+</footer>
+
+<div class="meter mono" aria-hidden="true"><span id="state">STILL</span> <span id="speed">0</span> PX/S</div>
+<div class="whisper mono" id="whisper" aria-hidden="true">slower.</div>
+
+<script src="poems.js"></script>
+<script>
+// Tuning, in pixels per second and seconds of stillness.
+const FAST = 700;      // above this you are skimming and lines drain
+const STILL = 60;      // below this a line in view gathers time
+const PAUSE_AT = 1.2;  // ^ words bloom
+const LINGER_AT = 3.6; // ~ words bloom
+const DRAIN = 4;       // skimming removes time this many times faster than it gathers
+
+const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
+const slug = new URLSearchParams(location.search).get("p");
+const index = Math.max(0, POEMS.findIndex(p => p.slug === slug));
+const poem = POEMS[index];
+const next = POEMS[(index + 1) % POEMS.length];
+
+document.title = `${poem.title} · linger`;
+document.getElementById("title").textContent = poem.title;
+document.getElementById("kicker").textContent =
+  `${String(index + 1).padStart(2, "0")} / ${String(POEMS.length).padStart(2, "0")}`;
+document.getElementById("next").href = `poem.html?p=${next.slug}`;
+document.getElementById("next-title").textContent = next.title;
+if (index === POEMS.length - 1) document.getElementById("next-label").textContent = "BACK TO THE FIRST";
+
+const poemEl = document.getElementById("poem");
+const lines = [];
+
+poem.stanzas.forEach((stanza, i) => {
+  const section = document.createElement("section");
+  section.className = "stanza wrap";
+  section.innerHTML = `<div class="num mono">${NUMERALS[i]}</div><div class="lines"></div>`;
+  const box = section.querySelector(".lines");
+  stanza.forEach(text => {
+    const p = document.createElement("p");
+    p.className = "line";
+    p.dataset.level = "0";
+    text.split(" ").forEach((token, j, all) => {
+      const w = document.createElement("span");
+      w.className = "w";
+      const mark = token[0];
+      if (mark === "^" || mark === "~") {
+        w.dataset.l = mark === "^" ? "1" : "2";
+        w.style.setProperty("--d", (Math.random() * 1.4).toFixed(2) + "s");
+        token = token.slice(1);
+      }
+      w.textContent = token;
+      p.append(w);
+      if (j < all.length - 1) p.append(" ");
+    });
+    box.append(p);
+    lines.push({ el: p, dwell: 0, level: 0 });
+  });
+  poemEl.append(section);
+});
+
+const speedEl = document.getElementById("speed");
+const stateEl = document.getElementById("state");
+const whisperEl = document.getElementById("whisper");
+let lastY = window.scrollY;
+let lastT = performance.now();
+let v = 0;
+let whispered = false;
+let meterTick = 0;
+
+function frame(now) {
+  const dt = Math.min((now - lastT) / 1000, 0.1);
+  lastT = now;
+  const y = window.scrollY;
+  const instant = dt > 0 ? Math.abs(y - lastY) / dt : 0;
+  lastY = y;
+  // Smooth over ~150ms so one jumpy frame doesn't count as skimming.
+  v += (instant - v) * (1 - Math.exp(-dt / 0.15));
+
+  const h = window.innerHeight;
+  for (const line of lines) {
+    const r = line.el.getBoundingClientRect();
+    const inView = r.top < h * 0.85 && r.bottom > h * 0.15;
+    if (!inView) continue;
+    if (v > FAST) line.dwell = Math.max(0, line.dwell - dt * DRAIN);
+    else if (v < STILL) line.dwell = Math.min(LINGER_AT + 2, line.dwell + dt);
+    const level = line.dwell >= LINGER_AT ? 2 : line.dwell >= PAUSE_AT ? 1 : 0;
+    if (level !== line.level) {
+      line.level = level;
+      line.el.dataset.level = level;
+    }
+  }
+
+  if (!whispered && v > FAST * 3) {
+    whispered = true;
+    whisperEl.classList.add("on");
+    setTimeout(() => whisperEl.classList.remove("on"), 2600);
+  }
+
+  if ((meterTick += dt) > 0.1) {
+    meterTick = 0;
+    speedEl.textContent = Math.round(v).toLocaleString();
+    stateEl.textContent = v > FAST ? "SKIMMING" : v < STILL ? "STILL" : "READING";
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
