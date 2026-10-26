@@ -2,7 +2,7 @@
 
 Poems that only finish if you slow down.
 
-**Read it:** https://joekarlsson.github.io/linger/
+**Read it:** https://linger.joekarlsson.com/
 
 Each line starts as a skeleton of a few words. Hold still and the blanks fill in; scroll fast and they drain away. The skeleton is its own sparser poem, and the full poem is there only for readers who stay with each line for a few seconds.
 
