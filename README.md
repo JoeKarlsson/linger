@@ -18,4 +18,8 @@ The home page list builds itself from that file. Timing values are at the top of
 
 Plain HTML, CSS, and JavaScript. No build step, no tracking.
 
+## License
+
+The poems are CC BY-NC-ND 4.0: share them with credit, but don't sell or alter them. The code is MIT, so reuse the bloom effect however you like. See [LICENSE](LICENSE).
+
 By [Joe Karlsson](https://joekarlsson.com).
