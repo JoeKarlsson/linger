@@ -12,9 +12,9 @@ Each poem arrives as a few words in a lot of white space. Hurry past, and that i
 
 ## Recording (November 2026)
 
-[![The linger poem "the lake" scrolling slowly: each line starts as a few scattered words, and the missing words fade in while the page holds still](.github/readme/2026-11-recording.webp)](.github/readme/2026-11-recording.mp4)
+![The linger poem "the lake" scrolling slowly: each line starts as a few scattered words, and the missing words fade in while the page holds still](.github/readme/2026-11-recording.gif)
 
-What linger looked like in November 2026, recorded for [its page on joekarlsson.com](https://www.joekarlsson.com/work/linger/). Click the picture to play the video.
+What linger looked like in November 2026, recorded for [its page on joekarlsson.com](https://www.joekarlsson.com/work/linger/). The full-quality video is [2026-11-recording.mp4](.github/readme/2026-11-recording.mp4).
 
 ## Writing a poem
 
