@@ -10,6 +10,12 @@ The driveway before you go inside. A snow day. The power going out. Four hundred
 
 Each poem arrives as a few words in a lot of white space. Hurry past, and that is all you get. Stay, and the rest fills in around them.
 
+## Recording (November 2026)
+
+[![The linger poem "the lake" scrolling slowly: each line starts as a few scattered words, and the missing words fade in while the page holds still](.github/readme/2026-11-recording.webp)](.github/readme/2026-11-recording.mp4)
+
+What linger looked like in November 2026, recorded for [its page on joekarlsson.com](https://www.joekarlsson.com/work/linger/). Click the picture to play the video.
+
 ## Writing a poem
 
 Poems live in [`poems.js`](poems.js). A plain word is always there. A word marked `^` comes when you pause, and a word marked `~` comes only if you stay.
