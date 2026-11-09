@@ -1,31 +1,43 @@
 # linger
 
-Poems for the in-between hours. Stay a while, and the words will come.
-
-**[linger.joekarlsson.com](https://linger.joekarlsson.com/)**
-
-[![linger](og.png)](https://linger.joekarlsson.com/)
-
-The driveway before you go inside. A snow day. The power going out. Four hundred miles of the same field. A Sunday with nothing in it.
-
-Each poem arrives as a few words in a lot of white space. Hurry past, and that is all you get. Stay, and the rest fills in around them.
-
-## Recording (November 2026)
+Poems for the in-between hours. Each line starts as a few words in white space,
+and the rest fills in while you hold still. This repo is the whole site, live at
+[linger.joekarlsson.com](https://linger.joekarlsson.com/): plain HTML, CSS and a
+little JavaScript, no build step.
 
 ![The linger poem "the lake" scrolling slowly: each line starts as a few scattered words, and the missing words fade in while the page holds still](.github/readme/2026-11-recording.gif)
 
-What linger looked like in November 2026, recorded for [its page on joekarlsson.com](https://www.joekarlsson.com/work/linger/). The full-quality video is [2026-11-recording.mp4](.github/readme/2026-11-recording.mp4).
+## Artist statement
+
+Almost everything on the web wants to move you along. linger is seven poems that
+only finish if you slow down. Paper has no idea how fast you're reading, and a
+web page does, so I made speed the thing that decides which words you get.
+
+[Read the full statement](https://www.joekarlsson.com/work/linger/).
+
+## Quick start
+
+```bash
+git clone https://github.com/JoeKarlsson/linger.git
+cd linger
+open index.html
+```
 
 ## Writing a poem
 
-Poems live in [`poems.js`](poems.js). A plain word is always there. A word marked `^` comes when you pause, and a word marked `~` comes only if you stay.
+Poems live in [`poems.js`](poems.js). A plain word is always there. A word
+marked `^` comes when you pause, and a word marked `~` comes only if you stay.
 
 ```js
 "~the call ^came ~at five-forty: no school.",
 ```
 
+## Development
+
+There are no tests or build. GitHub Pages serves `main` at the custom domain in
+`CNAME`, so a push to `main` is a deploy.
+
 ## License
 
-Poems [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/). Code MIT. See [LICENSE](LICENSE).
-
-By [Joe Karlsson](https://joekarlsson.com).
+Poems [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/).
+Code MIT. See [LICENSE](LICENSE).
