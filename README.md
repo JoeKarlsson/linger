@@ -1,19 +1,15 @@
 # linger
 
-Poems for the in-between hours. Each line starts as a few words in white space,
-and the rest fills in while you hold still. This repo is the whole site, live at
-[linger.joekarlsson.com](https://linger.joekarlsson.com/): plain HTML, CSS and a
-little JavaScript, no build step.
-
 ![The linger poem "the lake" scrolling slowly: each line starts as a few scattered words, and the missing words fade in while the page holds still](.github/readme/2026-11-recording.gif)
 
-## Artist statement
-
 Almost everything on the web wants to move you along. linger is seven poems that
-only finish if you slow down. Paper has no idea how fast you're reading, and a
-web page does, so I made speed the thing that decides which words you get.
+only finish if you slow down. Each line starts as a few words in white space,
+and the rest fills in while you hold still. Paper has no idea how fast you're
+reading, and a web page does, so I made speed the thing that decides which words
+you get.
 
-[Read the full statement](https://www.joekarlsson.com/work/linger/).
+[Read them at linger.joekarlsson.com](https://linger.joekarlsson.com/) ·
+[Read the full statement](https://www.joekarlsson.com/work/linger/)
 
 ## Quick start
 
