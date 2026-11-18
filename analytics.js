@@ -1,5 +1,15 @@
-// Plausible (self-hosted), skipped for bots and headless browsers.
+// Plausible (self-hosted), skipped for bots and headless browsers. Counts page
+// views, 404s from the not-found page (<html data-page="not-found">) and the
+// first uncaught error on a page, so breakage on the live site shows up.
+// Nothing about how anyone reads is sent.
 (function () {
+  // Queues events sent before the Plausible script has loaded. Defined even for
+  // bots, so nothing that calls window.plausible can throw; their queue is never sent.
+  window.plausible =
+    window.plausible ||
+    function () {
+      (window.plausible.q = window.plausible.q || []).push(arguments);
+    };
   if (
     navigator.webdriver ||
     /bot|crawl|spider|scrape|headless/i.test(navigator.userAgent) ||
@@ -8,11 +18,6 @@
   ) {
     return;
   }
-  window.plausible =
-    window.plausible ||
-    function () {
-      (window.plausible.q = window.plausible.q || []).push(arguments);
-    };
   const script = document.createElement("script");
   script.defer = true;
   script.dataset.domain = "linger.joekarlsson.com";
@@ -23,13 +28,18 @@
     window.plausible("404", { props: { path: location.pathname } });
   }
 
-  // Report the first uncaught error on a page, so breakage on the live site shows up.
+  // Browser extensions throw into the page too; those aren't the site's errors.
+  // The site creates no Trusted Types policies, so any policy error is an extension's.
+  const isFromExtension = (message, source) =>
+    /^(chrome|moz|safari-web)-extension:\/\//.test(source) || /trusted-types|TrustedTypePolicy/i.test(message);
+
   let reported = false;
   const report = (message, source) => {
-    if (reported) return;
+    message = String(message);
+    if (reported || isFromExtension(message, source)) return;
     reported = true;
     window.plausible("JS Error", {
-      props: { message: String(message).slice(0, 200), source, path: location.pathname },
+      props: { message: message.slice(0, 200), source, path: location.pathname },
     });
   };
   addEventListener("error", (e) => report(e.message, `${e.filename}:${e.lineno}`));
