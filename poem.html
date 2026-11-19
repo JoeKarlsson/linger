@@ -58,6 +58,7 @@
 <div class="whisper mono" id="whisper" aria-hidden="true">slower.</div>
 
 <script src="poems.js"></script>
+<script src="marker.js"></script>
 <script>
 // Tuning, in pixels per second and seconds of stillness.
 const FAST = 700;      // above this you are skimming and lines drain
@@ -89,22 +90,7 @@ poem.stanzas.forEach((stanza, i) => {
   section.innerHTML = `<div class="num mono">${NUMERALS[i]}</div><div class="lines"></div>`;
   const box = section.querySelector(".lines");
   stanza.forEach(text => {
-    const p = document.createElement("p");
-    p.className = "line";
-    p.dataset.level = "0";
-    text.split(" ").forEach((token, j, all) => {
-      const w = document.createElement("span");
-      w.className = "w";
-      const mark = token[0];
-      if (mark === "^" || mark === "~") {
-        w.dataset.l = mark === "^" ? "1" : "2";
-        w.style.setProperty("--d", (Math.random() * 1.4).toFixed(2) + "s");
-        token = token.slice(1);
-      }
-      w.textContent = token;
-      p.append(w);
-      if (j < all.length - 1) p.append(" ");
-    });
+    const p = buildMarkedLine(document.createElement("p"), text);
     box.append(p);
     lines.push({ el: p, dwell: 0, level: 0 });
   });

@@ -36,7 +36,7 @@
     <div class="label mono">ARTIST STATEMENT</div>
     <div class="prose">
       <p>Almost everything on the web wants to move you along. Feeds don't end, and articles print a read time at the top so you can decide whether they're worth the minutes. I spend my working days in developer marketing, where every page I ship gets judged by where people click next. I wanted to make one page that worked the other way.</p>
-      <p><em>linger</em> is seven poems that only finish if you slow down. Each line starts as a few words in white space, and the rest fills in while you hold still. Scroll fast and the words drain away again, and if you skim hard enough the page whispers "slower." at you. It's a bit of a joke, a page that won't give you the poem until you behave.</p>
+      <p><em>linger</em> is seven poems that only finish if you slow down. Each line starts as a few words between strips of marker, and the rest fills in while you hold still. Scroll fast and the words drain away again, and if you skim hard enough the page whispers "slower." at you. It's a bit of a joke, a page that won't give you the poem until you behave.</p>
       <p>The poems are about in-between time, like sitting in the driveway before going inside, a snow day, or a Sunday with nothing in it, and I wanted reading them to take some time too.</p>
       <p>I've been writing poetry for about ten years, and lately a lot of it has been blackout poetry on paper, where you black out most of a printed page until a poem is left. Tom Phillips did a version of this for A Humument, painting over the pages of a Victorian novel, and Mary Ruefle whited out words in an old book called A Little White Shadow. I kept wondering what the web could do with erasure that paper can't. Paper has no idea how fast you're reading, and a web page does, so I made speed the thing that decides which words you get.</p>
       <p>The Deletionist was a big inspiration. It's a bookmarklet by Amaranth Borsuk, Nick Montfort and Jesper Juul that erases most of the text on any web page you run it on and leaves a poem behind. linger goes the other direction. It starts with the erased version, a few words left on the page, and gives the rest back if you stay.</p>
@@ -50,15 +50,15 @@
     <ol class="readings prose">
       <li>
         <span class="mono">SKIM</span>
-        <span>Faster than about 700 pixels a second. You get the skeleton.<br><span class="sample">· snow · · · open · · page</span></span>
+        <span>Faster than about 700 pixels a second. You get the skeleton.<br><span class="sample" data-level="0" data-words="~the snow ^beneath ^it ^lay open ~like ^a page">· snow · · · open · · page</span></span>
       </li>
       <li>
         <span class="mono">PAUSE</span>
-        <span>Hold still on a line for about a second. Some of the blanks fill in.<br><span class="sample">· snow · it lay open · a page</span></span>
+        <span>Hold still on a line for about a second. Some of the marker lifts.<br><span class="sample" data-level="1" data-words="~the snow ^beneath ^it ^lay open ~like ^a page">· snow · it lay open · a page</span></span>
       </li>
       <li>
         <span class="mono">LINGER</span>
-        <span>Stay with a line for about four seconds. It completes.<br><span class="sample">the snow beneath it lay open like a page</span></span>
+        <span>Stay with a line for about four seconds. It completes.<br><span class="sample" data-level="2" data-words="~the snow ^beneath ^it ^lay open ~like ^a page">the snow beneath it lay open like a page</span></span>
       </li>
     </ol>
   </section>
@@ -80,5 +80,6 @@
   <a href="index.html">← POEM</a>
 </footer>
 
+<script src="marker.js"></script>
 </body>
 </html>

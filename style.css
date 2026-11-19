@@ -3,7 +3,8 @@
 :root {
   --bg: #fff;
   --fg: #000;
-  --faint: rgba(0, 0, 0, 0.16);
+  /* light speckle that wears through the black marker */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .45 -.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --muted: #5c5c5c;
   --rule: 2px solid var(--fg);
   --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -13,7 +14,7 @@
   :root {
     --bg: #000;
     --fg: #fff;
-    --faint: rgba(255, 255, 255, 0.2);
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .45 -.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     --muted: #a3a3a3;
     color-scheme: dark;
   }
@@ -71,9 +72,10 @@ a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.
   line-height: 0.78;
   letter-spacing: -0.02em;
   text-wrap: balance;
+  padding-bottom: 0.2em; /* line-height .78 lets the g's descender reach into the lede */
 }
 .lede {
-  margin: 3.5rem 0 0;
+  margin: 2rem 0 0;
   max-width: 34ch;
   font-size: 13px;
   line-height: 1.6;
@@ -102,6 +104,8 @@ a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.
   border-bottom: var(--rule);
 }
 .row:hover, .row:focus-visible {
+  --surface: var(--fg);
+  --ink: var(--bg);
   background: var(--fg);
   color: var(--bg);
   text-decoration: none;
@@ -116,6 +120,19 @@ a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.
   letter-spacing: -0.01em;
 }
 .row-meta { white-space: nowrap; }
+.row-first {
+  display: block;
+  margin-top: 0.7rem;
+  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+  font-weight: 500;
+  font-stretch: 100%;
+  line-height: 1.35;
+}
+.row:hover .w[data-l], .row:focus-visible .w[data-l] { color: inherit; transition: color 0s linear var(--d, 0s); }
+.row:hover .w[data-l]::before, .row:focus-visible .w[data-l]::before {
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 0.6s steps(6, end) var(--d, 0s);
+}
 @media (max-width: 520px) {
   .row { grid-template-columns: 2.25rem minmax(0, 1fr); }
   .row-meta { grid-column: 2; }
@@ -171,31 +188,44 @@ a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.
   letter-spacing: -0.01em;
 }
 
-/* Words that wait. Hidden words keep their space and leave a blank to fill. */
-.w { position: relative; }
-.w[data-l] {
-  color: transparent;
-  transition: color 0.3s ease;
+/* Words that wait sit under grainy marker. Each bar overhangs its word so neighbors
+   join into one stroke; visible words carry the page color so bars stop at their edges.
+   Reveals wipe off in frames (steps), like stop motion, instead of fading. */
+.w {
+  position: relative;
+  z-index: 1;
+  padding: 0 0.04em;
+  background: var(--surface, var(--bg));
 }
-.w[data-l]::after {
+.w[data-l] {
+  z-index: auto;
+  background: none;
+  color: transparent;
+  transition: color 0s linear 0.3s;
+}
+.w[data-l]::before {
   content: "";
   position: absolute;
-  left: 0.04em;
-  right: 0.04em;
-  bottom: 0.08em;
-  height: 1px;
-  background: var(--faint);
-  transition: opacity 0.3s ease;
+  z-index: 0;
+  left: -0.2em;
+  right: -0.2em;
+  top: calc(0.14em + var(--oy, 0em));
+  bottom: calc(0.02em - var(--oy, 0em));
+  background: var(--ink, var(--fg)) var(--grain);
+  transform: translate(var(--jx, 0px), var(--jy, 0px));
+  clip-path: inset(0);
+  pointer-events: none;
+  transition: clip-path 0.3s steps(4, end);
 }
 .line[data-level="1"] .w[data-l="1"],
 .line[data-level="2"] .w[data-l] {
-  color: var(--fg);
-  transition: color 1.8s ease var(--d, 0s);
+  color: inherit;
+  transition: color 0s linear var(--d, 0s);
 }
-.line[data-level="1"] .w[data-l="1"]::after,
-.line[data-level="2"] .w[data-l]::after {
-  opacity: 0;
-  transition: opacity 1.8s ease var(--d, 0s);
+.line[data-level="1"] .w[data-l="1"]::before,
+.line[data-level="2"] .w[data-l]::before {
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 0.6s steps(6, end) var(--d, 0s);
 }
 
 .end {
@@ -278,7 +308,8 @@ a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.
 .sample { color: var(--muted); font-style: normal; }
 
 @media (prefers-reduced-motion: reduce) {
-  .w[data-l], .w[data-l]::after,
-  .line[data-level] .w[data-l], .line[data-level] .w[data-l]::after,
-  .whisper { transition-duration: 0.01s !important; }
+  .w[data-l], .w[data-l]::before,
+  .line[data-level] .w[data-l], .line[data-level] .w[data-l]::before,
+  .row .w[data-l], .row .w[data-l]::before,
+  .whisper { transition-duration: 0.01s !important; transition-delay: 0s !important; }
 }
