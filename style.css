@@ -179,7 +179,7 @@ a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.
   min-width: 0;
   font-size: clamp(1.6rem, 4.4vw, 3.1rem);
 }
-.line {
+.lines .line {
   margin: 0;
   max-width: 24em;
   font-weight: 500;
